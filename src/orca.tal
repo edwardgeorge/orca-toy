@@ -38,7 +38,7 @@
 	@head &x $1 &y $1 &addr $2
 	@variables $24
 	@signal &midi $1 &midi-last $1
-	@voices $20
+	@voices $20 &end
 
 |0100 ( -> )
 
@@ -699,43 +699,61 @@ JMP2r
 (
 @|voices )
 
-@add-voice ( ch vel pitch len -- )
+@send-voice ( voice -- )
 
-	next-voice STHk STZ2
-	INCr INCr STHr STZ2
+	( send midi )
 
 JMP2r
 
+@release-voice ( voice -- )
+
+	( send midi )
+
+JMP2r
+
+@add-voice ( chn pitch len vel -- )
+
+	( save )
+	next-voice STHk STZ2
+	INCr INCr STHr STZ2
+	( send )
+
+JMP2r
+
+( release if already playing )
+	OVR2 ,&t STR2
+	#2000
+	&l
+		DUP #20 SFT .voices ADD LDZk #00 EQU ?&no-voice
+			INCk INC LDZ2 [ LIT2 &t $2 ] NEQ2 ?&no-voice
+				DUP release-voice
+			&no-voice
+			POP
+		INC GTHk ?&l
+	POP2
+
 @next-voice ( -- voice )
 
-	.voices
+	.voices/end .voices
+	&l
+		LDZk #00 EQU ?&end
+		#04 ADD GTHk ?&l
+	&end NIP
 
 JMP2r
 
 @manage-voices ( -- )
 
-JMP2r
-
-	( iterate thru channels )
-
-	#1000 &while EQUk ?&end
-		( note ) DUPk ADD .voices ADD LDZk
-		( remaining length ) SWP INC LDZ
-		( next channel if already 0 ) DUP #00 EQU ?&next-chan
-		( update remaining length ) #01 SUB ROTk DUP ADD .voices ADD INC STZ POP
-		( send note-off when length reaches 0 )
-		#00 NEQ ?&no-off
-			( channel ) OVR .Console/write DEO
-			( note ) DUP .Console/write DEO
-			( off ) #00 .Console/write DEO
-		&no-off
+	#2000
+	&l
+		DUP #20 SFT .voices ADD LDZk #00 EQU ?&no-voice
+			LDZk #01 SUB OVR STZ
+			LDZk #00 NEQ ?&no-voice
+			( TODO: send midi event )
+			&no-voice
 		POP
-		INC
-	!&while
-		&end POP2 JMP2r
-
-	&next-chan POP2 INC
-	,&while JMP
+		INC GTHk ?&l
+	POP2
 
 JMP2r
 

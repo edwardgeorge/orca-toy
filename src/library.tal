@@ -426,14 +426,14 @@ JMP2r
 	&*
 
 	STH2k
-	( channel ) get-port-right1-value [ ,&ch STR ]
+	( channel ) get-port-right1-value [ ,&chn STR ]
 	( octave ) STH2kr INC2 get-port-right1-value
 	( note ) STH2kr #0003 ADD2 get-port-right-raw
 	( has note ) DUP LIT ". NEQ ?&has-note [ POP2 POP2r JMP2r ] &has-note
 	( has bang ) get-bang ?&is-bang [ POP2 POP2r JMP2r ] &is-bang
 	( animate ) .types/io STH2r write-type
 	( get note ) chrmid SWP [ #0c MUL ] ADD
-	( play ) .Audio0/pitch [ LIT &ch $1 ] #03 AND #40 SFT ADD DEO
+	( play ) .Audio0/pitch [ LIT &chn $1 ] #03 AND #40 SFT ADD DEO
 
 JMP2r
 
@@ -441,7 +441,7 @@ JMP2r
 	&*
 
 	INC2k STH2k
-	( channel ) get-port-right-value ,&ch STR
+	( channel ) get-port-right-value ,&chn STR
 	( octave ) INC2r STH2kr get-port-right-value #0c MUL
 	( note ) INC2r STH2kr get-port-right-raw chrmid ADD ,&pitch STR
 	( velocity ) INC2r STH2kr get-port-right-value 
@@ -450,7 +450,7 @@ JMP2r
 	get-bang ?&has-bang POP2 JMP2r &has-bang
 	,&pitch LDR ?&has-pitch POP2 JMP2r &has-pitch
 	.types/io ROT ROT write-type
-	[ LIT2 &ch $1 &pitch $1 ] [ LIT2 &len $1 &vel $1 ] add-voice
+	[ LIT2 &chn $1 &pitch $1 ] [ LIT2 &len $1 &vel $1 ] add-voice
 
 JMP2r
 
