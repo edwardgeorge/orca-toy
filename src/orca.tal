@@ -701,8 +701,14 @@ JMP2r
 
 @add-voice ( ch vel pitch len -- )
 
-	SWP2 phex #2018 DEO
-	phex #0a18 DEO
+	next-voice STHk STZ2
+	INCr INCr STHr STZ2
+
+JMP2r
+
+@next-voice ( -- voice )
+
+	.voices
 
 JMP2r
 
@@ -765,6 +771,7 @@ JMP2r
 	POP2r
 	( draw meter )
 	draw-meter
+	draw-voices
 	( draw help )
 	.help LDZ ?draw-help
 
@@ -791,6 +798,19 @@ JMP2r
 		&skip
 		INC2 GTH2k ?&loop
 	POP2 POP2
+
+JMP2r
+
+@draw-voices ( -- )
+
+	#2000
+	&l
+		#00 OVR #74 SFT2 .grid/x2 LDZ2 #00d0 SUB2 ADD2 .Screen/x DEO2
+		#00 OVR #0f AND #40 SFT2 .grid/y1 LDZ2 ADD2 #0010 ADD2 .Screen/y DEO2
+		DUP #20 SFT .voices ADD LDZ2k draw-short
+		INC INC LDZ2 draw-short
+		INC GTHk ?&l
+	POP2
 
 JMP2r
 
