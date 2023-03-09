@@ -701,36 +701,43 @@ JMP2r
 
 @send-voice ( voice -- )
 
-	( send midi )
+	POP ( send midi )
 
 JMP2r
 
 @release-voice ( voice -- )
 
-	( send midi )
+	POP ( send midi )
 
 JMP2r
 
 @add-voice ( chn pitch len vel -- )
 
+	OVR2 find-voice DUP #ff EQU ?&no-voice
+		DUP release-voice
+		&no-voice POP
+
 	( save )
 	next-voice STHk STZ2
-	INCr INCr STHr STZ2
-	( send )
+	INCkr INCr STHr STZ2
+	STHr send-voice
 
 JMP2r
 
-( release if already playing )
-	OVR2 ,&t STR2
-	#2000
+@find-voice ( chn pitch -- <voice> )
+
+	,&t STR2
+	.voices/end .voices
 	&l
-		DUP #20 SFT .voices ADD LDZk #00 EQU ?&no-voice
-			INCk INC LDZ2 [ LIT2 &t $2 ] NEQ2 ?&no-voice
-				DUP release-voice
-			&no-voice
-			POP
-		INC GTHk ?&l
+		LDZk #00 EQU ?&skip
+			INCk INC LDZ2 [ LIT2 &t $2 ] NEQ2 ?&skip
+			NIP JMP2r
+			&skip
+		#04 ADD GTHk ?&l
 	POP2
+	#ff
+
+JMP2r
 
 @next-voice ( -- voice )
 
@@ -747,11 +754,10 @@ JMP2r
 	#2000
 	&l
 		DUP #20 SFT .voices ADD LDZk #00 EQU ?&no-voice
-			LDZk #01 SUB OVR STZ
+			( decrement ) LDZk #01 SUB OVR STZ
 			LDZk #00 NEQ ?&no-voice
-			( TODO: send midi event )
-			&no-voice
-		POP
+			DUP release-voice
+			&no-voice POP
 		INC GTHk ?&l
 	POP2
 
@@ -821,12 +827,15 @@ JMP2r
 
 @draw-voices ( -- )
 
+	#04 ;draw-chr/color STA
 	#2000
 	&l
 		#00 OVR #74 SFT2 .grid/x2 LDZ2 #00d0 SUB2 ADD2 .Screen/x DEO2
 		#00 OVR #0f AND #40 SFT2 .grid/y1 LDZ2 ADD2 #0010 ADD2 .Screen/y DEO2
-		DUP #20 SFT .voices ADD LDZ2k draw-short
-		INC INC LDZ2 draw-short
+		DUP #20 SFT .voices ADD LDZk #00 EQU ?&skip
+			LDZ2k draw-short INC INC LDZ2k draw-short
+			&skip
+			POP
 		INC GTHk ?&l
 	POP2
 
