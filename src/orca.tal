@@ -430,7 +430,6 @@ JMP2r
 
 @run ( -- )
 
-	manage-voices
 	init/grid
 	( reset head ) LIT2r 0000
 	.grid/height LDZ #00
@@ -453,6 +452,7 @@ JMP2r
 		&skip
 	.timer/frame LDZ2k INC2 ROT STZ2
 	#00 .timer/beat STZ
+	manage-voices
 
 JMP2r
 
@@ -699,7 +699,16 @@ JMP2r
 (
 @|voices )
 
-@manage-voices ( -> )
+@add-voice ( ch vel pitch len -- )
+
+	SWP2 phex #2018 DEO
+	phex #0a18 DEO
+
+JMP2r
+
+@manage-voices ( -- )
+
+JMP2r
 
 	( iterate thru channels )
 

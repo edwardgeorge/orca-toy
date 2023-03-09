@@ -440,37 +440,16 @@ JMP2r
 @op-midi ": "Send 20 "a 20 "midi 20 "note $1
 	&*
 
-	STH2k
-	( channel ) get-port-right1-value [ ,&ch STR ]
-	( octave ) STH2kr INC2 get-port-right1-value
-	( note ) STH2kr #0003 ADD2 get-port-right-raw
-	( velocity ) STH2kr #0004 ADD2 get-port-right-raw [ ,&vel STR ]
-	( length ) STH2kr #0005 ADD2 get-port-right-value
-	( has note ) OVR LIT ". NEQ ?&has-note [ POP POP2 POP2r JMP2r ] &has-note
-	( has bang ) get-bang ?&is-bang [ POP POP2 POP2r JMP2r ] &is-bang
-	( store length ) .voices ,&ch LDR DUP ADD ADD INC STZk POP [ ,&len STR ]
-	( animate ) .types/io STH2r write-type
-	( get note ) chrmid SWP [ #0c MUL ] ADD
-	( store note ) DUP .voices ,&ch LDR DUP ADD ADD STZ
-	( get velocity ) [ LIT &vel $1 ]
-		DUP LIT ". NEQ ?&normalize
-			( default to max ) POP #7f ,&continue JMP
-		&normalize
-		base128 &continue SWP
-	( get channel ) [ LIT &ch $1 ]
-	( note on )
-	( channel ) DUP .Console/write DEO
-	( note ) OVR .Console/write DEO
-	( velocity ) ROT .Console/write DEO
-	.signal/midi LDZk INC SWP STZ
-	( note off immediately if 0 length )
-	[ LIT &len $1 ] #00 NEQ ?&done
-		( channel ) .Console/write DEO
-		( note ) .Console/write DEO
-		( off ) #00 .Console/write DEO
-		JMP2r
-	&done
-	POP2
+	INC2k STH2k
+	( channel ) get-port-right-value ,&ch STR
+	( octave ) INC2r STH2kr get-port-right-value #0c MUL
+	( note ) INC2r STH2kr get-port-right-raw chrmid ADD ,&pitch STR
+	( velocity ) INC2r STH2kr get-port-right-value ,&vel STR
+	( length ) INC2r STH2r get-port-right-value ,&len STR
+	get-bang ?&has-bang POP2 JMP2r &has-bang
+	,&pitch LDR ?&has-pitch POP2 JMP2r &has-pitch
+	.types/io ROT ROT write-type
+	[ LIT2 &ch $1 &pitch $1 ] [ LIT2 &vel $1 &len $1 ] add-voice
 
 JMP2r
 
