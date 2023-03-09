@@ -38,7 +38,7 @@
 	@head &x $1 &y $1 &addr $2
 	@variables $24
 	@signal &midi $1 &midi-last $1
-	@voices $20 &end
+	@voices $40 &end ( len vel chn pitch )
 
 |0100 ( -> )
 
@@ -697,17 +697,21 @@ JMP2r
 JMP2r
 
 (
-@|voices )
+@|voices ) ( len vel chn note )
 
 @send-voice ( voice -- )
 
-	POP ( send midi )
+	( chn ) INC INCk LDZ2 SWP .Console/write DEO
+	( note ) .Console/write DEO
+	( vel ) LDZ .Console/write DEO
 
 JMP2r
 
 @release-voice ( voice -- )
 
-	POP ( send midi )
+	( chn ) INC INC LDZ2 SWP .Console/write DEO
+	( note ) .Console/write DEO
+	( vel ) #00 .Console/write DEO
 
 JMP2r
 
@@ -715,8 +719,8 @@ JMP2r
 
 	OVR2 find-voice DUP #ff EQU ?&no-voice
 		DUP release-voice
+		#00 OVR STZ
 		&no-voice POP
-
 	( save )
 	next-voice STHk STZ2
 	INCkr INCr STHr STZ2
@@ -751,7 +755,7 @@ JMP2r
 
 @manage-voices ( -- )
 
-	#2000
+	#1000
 	&l
 		DUP #20 SFT .voices ADD LDZk #00 EQU ?&no-voice
 			( decrement ) LDZk #01 SUB OVR STZ
@@ -828,7 +832,7 @@ JMP2r
 @draw-voices ( -- )
 
 	#04 ;draw-chr/color STA
-	#2000
+	#1000
 	&l
 		#00 OVR #74 SFT2 .grid/x2 LDZ2 #00d0 SUB2 ADD2 .Screen/x DEO2
 		#00 OVR #0f AND #40 SFT2 .grid/y1 LDZ2 ADD2 #0010 ADD2 .Screen/y DEO2
