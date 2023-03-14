@@ -10,7 +10,7 @@ DST="bin/orca.rom"
 CPY="$HOME/roms"
 ARG="etc/tests.orca"
 
-STORE="$HOME/Applications/butler push"
+STORE="$HOME/bin/butler push"
 STOREID="hundredrabbits/orca:uxn"
 
 echo ">> Cleaning"
