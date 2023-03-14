@@ -37,7 +37,6 @@
 	@selection &from &x1 $1 &y1 $1 &to &x2 $1 &y2 $1
 	@head &x $1 &y $1 &addr $2
 	@variables $24
-	@signal &midi $1 &midi-last $1
 	@voices $40 &end ( len vel chn pitch )
 
 |0100 ( -> )
@@ -424,7 +423,6 @@ BRK
 	;data/locks .grid/length LDZ2 #0000 mfil
 	;data/types .grid/length LDZ2 #0000 mfil
 	;variables #0024 [ LIT2 ".. ] mfil
-	#00 .signal/midi STZ
 
 JMP2r
 
@@ -767,6 +765,18 @@ JMP2r
 
 JMP2r
 
+@count-voices ( -- count )
+
+	LITr 00
+	.voices/end .voices
+	&l
+		LDZk #00 NEQ STH ADDr
+		#04 ADD GTHk ?&l
+	&end POP2
+	STHr
+
+JMP2r
+
 (
 @|drawing )
 
@@ -799,7 +809,7 @@ JMP2r
 	POP2r
 	( draw meter )
 	draw-meter
-	draw-voices
+	( draw-voices )
 	( draw help )
 	.help LDZ ?draw-help
 
@@ -926,9 +936,8 @@ JMP2r
 
 	[ LIT2 &x $2 ] .Screen/x DEO2
 	[ LIT2 &y $2 ] .Screen/y DEO2
-	.signal/midi LDZ #07 LTHk [ JMP SWP POP ] STH
-	;meter-icn #00 STHkr #40 SFT2 ADD2 .Screen/addr DEO2
-	STHr #07 EQU INC .Screen/sprite DEO
+	;meter-icn #00 count-voices #40 SFT2 ADD2 .Screen/addr DEO2
+	#01 .Screen/sprite DEO
 
 JMP2r
 
@@ -1200,6 +1209,14 @@ JMP2r
 @b36chr ( b36 -- char ) #24 ( MOD ) [ DIVk MUL SUB ] #00 SWP ;b36clc ADD2 LDA JMP2r
 @chrb36 ( char -- b36 ) #20 SUB #00 SWP ;values ADD2 LDA JMP2r
 @chrmid ( char -- midi ) DUP chrb36 SWP ciuc #24 MUL ADD #00 SWP ;notes ADD2 LDA JMP2r
+@chrvel ( char -- vel )
+
+	DUP LIT "0 EQU ?&silence
+	chrb36 #03 MUL DUP #00 NEQ ?&has-vel POP #7f &has-vel
+
+JMP2r
+	&silence POP #00 JMP2r
+
 @ciuc ( char -- bool ) LIT "A SUB #1a LTH JMP2r
 @ci-key ( char -- bool ) #20 SUB #5b LTH JMP2r
 @mcpy ( src* dst* len* -- ) SWP2 STH2 OVR2 ADD2 SWP2 &loop LDAk STH2kr STA INC2r INC2 GTH2k ?&loop POP2 POP2 POP2r JMP2r

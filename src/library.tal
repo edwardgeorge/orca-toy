@@ -444,8 +444,7 @@ JMP2r
 	( channel ) get-port-right-value ,&chn STR
 	( octave ) INC2r STH2kr get-port-right-value #0c MUL
 	( note ) INC2r STH2kr get-port-right-raw chrmid ADD ,&pitch STR
-	( velocity ) INC2r STH2kr get-port-right-value 
-		DUP #00 NEQ ?&has-vel POP #7f &has-vel ,&vel STR
+	( velocity ) INC2r STH2kr get-port-right-raw chrvel ,&vel STR
 	( length ) INC2r STH2r get-port-right-value INC ,&len STR
 	get-bang ?&has-bang POP2 JMP2r &has-bang
 	,&pitch LDR ?&has-pitch POP2 JMP2r &has-pitch
