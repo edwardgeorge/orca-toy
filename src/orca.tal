@@ -132,7 +132,7 @@ BRK
 	( name ) "Orca 0a
 	( details ) "A 20 "Livecoding 20 "Playground 0a
 	( author ) "By 20 "Hundred 20 "Rabbits 0a
-	( date ) "Feb 20 "19, 20 "2023 00
+	( date ) "Mar 20 "24, 20 "2023 00
 	02
 		( icon ) 83 =appicon
 		( mask ) 41 1705
@@ -1220,6 +1220,7 @@ JMP2r
 @ciuc ( char -- bool ) LIT "A SUB #1a LTH JMP2r
 @ci-key ( char -- bool ) #20 SUB #5b LTH JMP2r
 @mcpy ( src* dst* len* -- ) SWP2 STH2 OVR2 ADD2 SWP2 &loop LDAk STH2kr STA INC2r INC2 GTH2k ?&loop POP2 POP2 POP2r JMP2r
+@sseg ( a* b* -- f ) STH2 &l LDAk LDAkr STHr NEQ ?&e INC2k LDA #00 EQU ?&e INC2 INC2r !&l &e LDA LDAr STHr EQU JMP2r
 
 ( random )
 

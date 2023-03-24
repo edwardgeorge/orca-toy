@@ -1,5 +1,5 @@
 (
-@|core )
+@|operators )
 
 @op-a "A "Outputs 20 "sum 20 "of 20 "inputs $1
 	&lc get-bang ?&* POP2 JMP2r &*
@@ -486,10 +486,16 @@ JMP2r
 		INC2 DUP2 get-port-right-raw LIT ". NEQ ?&while
 	POP2
 	( has bang ) get-bang ?&is-bang [ POP2r JMP2r ] &is-bang
+
+	STH2r
+	( spd ) DUP2 get-word ;&spd-txt SWP2 sseg ?cmd-spd
+
+	STH2
 	.head LDZ2 INC STH2kr get-word inject-file
 	( animate ) .types/io STH2r
 
 !write-type
+	&spd-txt "spd: $1
 
 @op-null
 	&*
@@ -497,6 +503,18 @@ JMP2r
 	POP2
 
 JMP2r
+
+(
+@|commands )
+
+@cmd-spd ( cell* -- )
+
+	#0004 ADD2
+	( hn ) STH2k get-port-right1-value INC2r
+	( ln ) STH2r get-port-right1-value
+	#0f AND SWP #0f AND #40 SFT ADD
+
+!set-speed
 
 ~src/manifest.tal
 
