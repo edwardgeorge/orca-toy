@@ -450,9 +450,8 @@ JMP2r
 		&skip
 	.timer/frame LDZ2k INC2 ROT STZ2
 	#00 .timer/beat STZ
-	manage-voices
 
-JMP2r
+!manage-voices
 
 @run-char ( id* -- )
 
@@ -697,14 +696,6 @@ JMP2r
 (
 @|voices ) ( len vel chn note )
 
-@send-voice ( voice -- )
-
-	( chn ) INC INCk LDZ2 SWP .Console/write DEO
-	( note ) .Console/write DEO
-	( vel ) LDZ .Console/write DEO
-
-JMP2r
-
 @release-voice ( voice -- )
 
 	( chn ) INC INC LDZ2 SWP .Console/write DEO
@@ -722,7 +713,11 @@ JMP2r
 	( save )
 	next-voice STHk STZ2
 	INCkr INCr STHr STZ2
-	STHr send-voice
+	STHr
+
+	( chn ) INC INCk LDZ2 SWP .Console/write DEO
+	( note ) .Console/write DEO
+	( vel ) LDZ .Console/write DEO
 
 JMP2r
 
