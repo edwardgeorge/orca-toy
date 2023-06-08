@@ -13,7 +13,7 @@ You must have the [Uxn](https://git.sr.ht/~rabbits/uxn/) assembler and emulator.
 uxnasm src/orca.tal bin/orca.rom && uxnemu bin/orca.rom
 ```
 
-If do not wish to assemble it yourself, you can download [orca.rom](https://rabbits.srht.site/orca/orca.rom).
+If do not wish to assemble it yourself, you can download [orca.rom](https://rabbits.srht.site/orca-toy/orca.rom).
 
 [![builds.sr.ht status](https://builds.sr.ht/~rabbits/orca-toy.svg)](https://builds.sr.ht/~rabbits/orca-toy?)
 
