@@ -11,7 +11,7 @@ tasks:
         cc src/uxnasm.c -o ../uxnasm
     - assemble: |
         cd orca-toy
-        ../uxnasm src/orca.tal ../orca.rom
+        ../uxnasm src/orca.tal orca.rom
     - upload: |
         tar -czf out.tar.gz orca-toy/orca.rom
         acurl() {
