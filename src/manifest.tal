@@ -260,7 +260,7 @@ JMP2r
 	.Screen/y DEI2
 		.Screen/auto DEI
 			#f2 .Screen/auto DEO
-			;blank-icn .Screen/addr DEO2
+			;fill-icn ;blank-icn ;draw-chr/color LDA #00 EQU [ JMP SWP2 POP2 ] .Screen/addr DEO2
 			;draw-chr/color LDA .Screen/sprite DEOk DEO
 		.Screen/auto DEO
 	.Screen/y DEO2
@@ -309,6 +309,7 @@ JMP2r
 @update-cursor ( color addr* -- )
 
 	#00 .Screen/auto DEO
+	;fill-icn .Screen/addr DEO2
 	#40 draw-cursor
 	.Mouse/x DEI2 ,draw-cursor/x STR2
 	.Mouse/y DEI2 ,draw-cursor/y STR2
@@ -361,5 +362,7 @@ JMP2r
 	2020 20b8 7c7c 3838 ]
 @blank-icn [
 	0000 0000 0000 0000 ]
+@fill-icn [
+	ffff ffff ffff ffff ]
 
 ~src/assets.tal

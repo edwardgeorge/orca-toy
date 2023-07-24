@@ -422,9 +422,10 @@ BRK
 	&grid
 	;data/locks .grid/length LDZ2 #0000 mfil
 	;data/types .grid/length LDZ2 #0000 mfil
-	;variables #0024 [ LIT2 ".. ] mfil
+	;variables #0024 [ LIT2 ".. ]
 
-JMP2r
+!mfil
+
 
 @run ( -- )
 
@@ -752,7 +753,7 @@ JMP2r
 	&l
 		DUP #20 SFT .voices ADD LDZk #00 EQU ?&no-voice
 			( decrement ) LDZk #01 SUB OVR STZ
-			LDZk #00 NEQ ?&no-voice
+			LDZk ?&no-voice
 			DUP release-voice
 			&no-voice POP
 		INC GTHk ?&l
@@ -1094,8 +1095,8 @@ JMP2r
 	.selection/x1 LDZ .selection/x2 LDZ EQU ?&skip
 	.selection/y2 LDZ INC .selection/y1 LDZ
 	&loop
-		( l ) .selection/x1 LDZ ,&row JSR set-cell
-		( r ) .selection/x2 LDZ ,&row JSR set-cell
+		( l ) .selection/x1 LDZ edit-comment/row set-cell
+		( r ) .selection/x2 LDZ edit-comment/row set-cell
 		INC GTHk ?&loop
 	POP2
 	&skip
@@ -1207,7 +1208,7 @@ JMP2r
 @chrvel ( char -- vel )
 
 	DUP LIT "0 EQU ?&silence
-	chrb36 #03 MUL DUP #00 NEQ ?&has-vel POP #7f &has-vel
+	chrb36 #03 MUL DUP ?&has-vel POP #7f &has-vel
 
 JMP2r
 	&silence POP #00 JMP2r
