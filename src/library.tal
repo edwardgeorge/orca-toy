@@ -306,12 +306,12 @@ STH2r !set-port-output-below
 	( set type ) .types/op STH2kr write-type
 	( step ) get-port-left1-value
 	( max ) STH2kr get-port-right1-value ( min1 ) DUP #00 EQU ADD STH2
-	( frame ADD max SUB 1 ) .timer/frame LDZ2 STHkr #00 SWP ADD2 #0001 SUB2
-	( MUL step ) OVRr STHr #00 SWP MUL2
-	( % max ) STHkr #00 SWP
+	( frame ADD max SUB 1 ) .timer/frame LDZ2 #00 STHkr ADD2 #0001 SUB2
+	( MUL step ) OVRr #00 STHr MUL2
+	( % max ) #00 STHkr
 	( mod2 ) [ DIV2k MUL2 SUB2 ]
-	( ADD step ) SWPr STHr #00 SWP ADD2
-	( bucket GTH= max ) STHr #00 SWP LTH2 #01 NEQ
+	( ADD step ) SWPr #00 STHr ADD2
+	( bucket GTH= max ) #00 STHr LTH2 #01 NEQ
 	( bang if equal ) #fc MUL LIT ". ADD
 
 STH2r !set-port-output-below

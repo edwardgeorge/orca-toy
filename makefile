@@ -2,7 +2,7 @@ ID=orca
 DIR=~/roms
 ASM=uxncli ${DIR}/drifblim.rom
 LIN=uxncli ${DIR}/uxnlin.rom
-EMU=uxnemu
+EMU=uxn11
 ROM=bin/${ID}.rom
 
 all: ${ROM}

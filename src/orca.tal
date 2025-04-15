@@ -26,7 +26,7 @@
 		&io $1
 		&comment $1
 
-|0000
+|000
 
 	@dpad $1 &last $1
 	@timer &beat $1 &speed $1 &playing $1 &frame $1 &frame-lb $1
@@ -39,31 +39,31 @@
 	@variables $24
 	@voices $40 &end ( len vel chn pitch )
 
-|0100 ( -> )
+|100 ( -> )
 
-	( meta )
+	( | meta )
 	;meta #06 DEO2
 
-	( theme )
+	( | theme )
 	#0f75 .System/r DEO2
 	#0f7c .System/g DEO2
 	#0f7a .System/b DEO2
 
-	( init random )
+	( | init random )
 	init-prng
 
-	( drawing mode )
+	( | drawing mode )
 	#15 .Screen/auto DEO
 
-	( thinkpad: #02a8 x #0180 )
+	( | thinkpad: #02a8 x #0180 )
 	#0328 .Screen/width DEO2
 	#0200 .Screen/height DEO2
 
-	( size playdate
+	( | size playdate
 	#0190 .Screen/width DEO2
 	#00f0 .Screen/height DEO2 )
 
-	( synths )
+	( | synths )
 	#dd .Audio0/volume DEO #0118 .Audio0/adsr DEO2 #0100 .Audio0/length DEO2
 	#ef .Audio1/volume DEO #0334 .Audio1/adsr DEO2 #0100 .Audio1/length DEO2
 	#fe .Audio2/volume DEO #1414 .Audio2/adsr DEO2 #0100 .Audio2/length DEO2
@@ -74,22 +74,22 @@
 	;saw-pcm .Audio2/addr DEO2
 	;sqr-pcm .Audio3/addr DEO2
 
-	( x )
+	( | x )
 	#0010 .grid/x1 STZ2
 	.Screen/width DEI2
 		DUP2 #03 SFT2 NIP #04 SUB .grid/width STZ
 		#01 SFT2 .grid/width LDZ #01 SFT #00 SWP #30 SFT2 ADD2 #0004 ADD2 .grid/x2 STZ2
-	( y )
+	( | y )
 	#0020 .grid/y1 STZ2
 	.Screen/height DEI2
 		DUP2 #04 SFT2 NIP #05 SUB .grid/height STZ
 		#01 SFT2 .grid/height LDZ #01 SFT #00 SWP #40 SFT2 ADD2 .grid/y2 STZ2
-	( len )
+	( | len )
 	[ LIT2 00 -grid/height ] LDZ
 	[ LIT2 00 -grid/width ] LDZ
 		MUL2 .grid/length STZ2
 
-	( cache positions )
+	( | cache positions )
 	.grid/x1 LDZ2
 		DUP2 #0078 ADD2 ;draw-filepath/x STA2
 		DUP2 ;draw-position/x STA2
@@ -108,22 +108,22 @@
 		DUP2 ;draw-filepath/y STA2
 		;draw-meter/y STA2
 
-	( theme support )
+	( | theme support )
 	load-theme
 	draw-menu
 
-	( blank file )
+	( | blank file )
 	file-new
 
-	( draw position )
+	( | draw position )
 	toggle-help
 	toggle-grid
 	draw-position
 
-	( start )
+	( | start )
 	.timer/playing LDZk #00 EQU SWP STZ
 
-	( vectors )
+	( | vectors )
 	untrap
 
 BRK
@@ -132,7 +132,7 @@ BRK
 	( name ) "Orca 0a
 	( details ) "A 20 "Livecoding 20 "Playground 0a
 	( author ) "By 20 "Hundred 20 "Rabbits 0a
-	( date ) "Mar 20 "24, 20 "2023 00
+	( date ) "15 20 "Apr 20 "2025 00
 	02
 		( icon ) 83 =appicon
 		( mask ) 41 1705
