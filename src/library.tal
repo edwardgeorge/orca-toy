@@ -322,11 +322,11 @@ STH2r !set-port-output-below
 	( key ) get-port-left1-raw
 	( val ) STH2kr get-port-right1-raw
 	DUP LIT ". EQU ?&idle
-	OVR chrb36 ?&save
-	( load )
-		NIP chrb36 .variables ADD LDZ STH2r [ LIT2 00 -grid/width ] LDZ ADD2 !set-port-output
+	OVR LIT ". EQU ?&load
 	&save
 		SWP chrb36 .variables ADD STZ POP2r JMP2r
+	&load
+		NIP chrb36 .variables ADD LDZ STH2r [ LIT2 00 -grid/width ] LDZ ADD2 !set-port-output
 	&idle
 		POP2 POP2r
 
