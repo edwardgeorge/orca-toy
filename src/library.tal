@@ -130,9 +130,7 @@ STH2r !set-port-output-below
 	STH2k
 	( set type ) .types/op STH2kr write-type
 	( get above ) [ LIT2 00 -grid/width ] LDZ SUB2 get-port-left-raw
-	( ignore cable )
-	DUP chrb36 #13 NEQ ?&no-wire
-		POP POP2r JMP2r &no-wire
+	( ignore cable ) DUP [ LIT "J ] NEQ ?{ POP POP2r JMP2r }
 	( skip down )
 	STH2r
 	&while
@@ -366,9 +364,7 @@ LIT "* STH2r !set-port-output
 	STH2k
 	( set type ) .types/op STH2kr write-type
 	( get above ) get-port-left1-raw
-	( ignore cable )
-	DUP chrb36 #22 NEQ ?&no-wire
-		POP POP2r JMP2r &no-wire
+	( ignore cable ) DUP [ LIT "y ] NEQ ?{ POP POP2r JMP2r }
 	( skip down )
 	STH2r
 	&while

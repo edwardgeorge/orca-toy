@@ -343,6 +343,14 @@ JMP2r
 (
 @|stdlib )
 
+@<phex> ( short* -: )
+	SWP /b
+	&b ( byte -: )
+		DUP #04 SFT /c
+	&c ( byte -: )
+		#0f AND DUP #09 GTH #27 MUL ADD [ LIT "0 ] ADD #18 DEO
+		JMP2r
+
 @scap ( str* -- end* ) LDAk #00 NEQ [ JMP JMP2r ] &w INC2 LDAk ?&w JMP2r
 @spop ( str* -- ) LDAk ?&n POP2 JMP2r &n scap #0001 SUB2 #00 ROT ROT STA JMP2r
 @sput ( chr str* -- ) scap INC2k #00 ROT ROT STA STA JMP2r
@@ -350,7 +358,6 @@ JMP2r
 @scat ( src* dst* -- ) scap
 @scpy ( src* dst* -- ) STH2 &w LDAk STH2kr STA INC2r INC2 LDAk ?&w POP2 #00 STH2r STA JMP2r
 @mclr ( src* len* -- ) OVR2 ADD2 SWP2 &l STH2k #00 STH2r STA INC2 GTH2k ?&l POP2 POP2 JMP2r
-@phex ( short* -- ) SWP ,&b JSR &b DUP #04 SFT ,&c JSR &c #0f AND DUP #09 GTH #27 MUL ADD #30 ADD #18 DEO JMP2r 
 
 @exit ( -- )
 
