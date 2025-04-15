@@ -364,7 +364,7 @@ LIT "* STH2r !set-port-output
 	STH2k
 	( set type ) .types/op STH2kr write-type
 	( get above ) get-port-left1-raw
-	( ignore cable ) DUP [ LIT "y ] NEQ ?{ POP POP2r JMP2r }
+	( ignore cable ) DUP [ LIT "Y ] NEQ ?{ POP POP2r JMP2r }
 	( skip down )
 	STH2r
 	&while
