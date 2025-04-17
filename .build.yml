@@ -6,12 +6,12 @@ environment:
     SITE: rabbits.srht.site/orca-toy
 sources:
     - https://git.sr.ht/~rabbits/uxnmin
-    - https://git.sr.ht/~rabbits/nasu
+    - https://git.sr.ht/~rabbits/orca-toy
 tasks:
     - prepare: |
         xxd -r -p uxnmin/etc/drifloon.rom.txt asm.rom
         cc -DNDEBUG -O2 -g0 -s uxnmin/src/uxnmin.c -o uxn.bin
-        cat nasu/src/orca.tal nasu/src/library.tal nasu/src/manifest.tal nasu/src/assets.tal > src.tal
+        cat orca-toy/src/orca.tal orca-toy/src/library.tal orca-toy/src/manifest.tal orca-toy/src/assets.tal > src.tal
     - assemble: |
         cat src.tal | ./uxn.bin asm.rom > orca.rom
     - upload: |
