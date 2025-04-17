@@ -1,17 +1,19 @@
 image: debian/stable
+packages:
+- xxd
 oauth: pages.sr.ht/PAGES:RW
 environment:
     SITE: rabbits.srht.site/orca-toy
 sources:
-    - https://git.sr.ht/~rabbits/uxn11
-    - https://git.sr.ht/~rabbits/orca-toy
+    - https://git.sr.ht/~rabbits/uxnmin
+    - https://git.sr.ht/~rabbits/nasu
 tasks:
     - prepare: |
-        cd uxn11
-        cc src/uxnasm.c -o ../uxnasm
+        xxd -r -p uxnmin/etc/drifloon.rom.txt asm.rom
+        cc -DNDEBUG -O2 -g0 -s uxnmin/src/uxnmin.c -o uxn.bin
+        cat nasu/src/orca.tal nasu/src/library.tal nasu/src/manifest.tal nasu/src/assets.tal > src.tal
     - assemble: |
-        cd orca-toy
-        ../uxnasm src/orca.tal ../orca.rom
+        cat src.tal | ./uxn.bin asm.rom > orca.rom
     - upload: |
         tar -czf out.tar.gz orca.rom
         acurl() {
