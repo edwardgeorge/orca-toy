@@ -7,6 +7,7 @@
 |40 @Audio1 &vector $2 &position $2 &output $1 &pad $3 &adsr $2 &length $2 &addr $2 &volume $1 &pitch $1
 |50 @Audio2 &vector $2 &position $2 &output $1 &pad $3 &adsr $2 &length $2 &addr $2 &volume $1 &pitch $1
 |60 @Audio3 &vector $2 &position $2 &output $1 &pad $3 &adsr $2 &length $2 &addr $2 &volume $1 &pitch $1
+|70 @Midi &vector $2 &status $1 &data $2
 |80 @Controller &vector $2 &button $1 &key $1
 |90 @Mouse &vector $2 &x $2 &y $2 &state $1 &chord $1 &pad $4 &scrolly &scrolly-hb $1 &scrolly-lb $1
 |a0 @File &vector $2 &success $2 &stat $2 &delete $1 &append $1 &name $2 &length $2 &read $2 &write $2
@@ -699,10 +700,10 @@ JMP2r
 
 @release-voice ( voice -- )
 
-	( chn ) INC INC LDZ2 SWP .Console/write DEO
-	( note ) .Console/write DEO
-	( vel ) #00 .Console/write DEO
-
+	INC LDZk ( load vel )
+	SWP INC LDZ2 ( load chn pitch )
+	SWP note-off
+	send-midi
 JMP2r
 
 @add-voice ( chn pitch len vel -- )
@@ -716,10 +717,25 @@ JMP2r
 	INCkr INCr STHr STZ2
 	STHr
 
-	( chn ) INC INCk LDZ2 SWP .Console/write DEO
-	( note ) .Console/write DEO
-	( vel ) LDZ .Console/write DEO
+	INC LDZk ( load vel )
+	SWP INC LDZ2 ( load chn pitch )
+	SWP note-on
+	send-midi
+JMP2r
 
+@send-midi ( vel pitch midistatusbyte -- )
+
+    DUP SWP2 SWP .Midi/data DEO2
+    .Midi/status DEO
+    POP
+JMP2r
+
+@note-on ( chn -- midistatusbyte )
+    #0f AND #90 ORA
+JMP2r
+
+@note-off ( chn -- midistatusbyte )
+    #0f AND #80 ORA
 JMP2r
 
 @find-voice ( chn pitch -- <voice> )
@@ -1256,4 +1272,3 @@ JMP2r
 JMP2r
 
 ~src/library.tal
-
